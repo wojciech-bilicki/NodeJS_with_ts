@@ -19,3 +19,7 @@ export const getDataFromRequest = (req: IncomingMessage):Promise<Game> => new Pr
     reject(err)
   }
 })
+
+export const getDefaultHeaders = () => (
+  { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+)
