@@ -1,17 +1,26 @@
-import { RouteComponentProps } from '@reach/router';
+import { RouteComponentProps, useNavigate } from '@reach/router';
 import Typography from '@material-ui/core/Typography';
-import { IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { IconButton, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
 import { Delete } from '@material-ui/icons'
 
 import React, { useEffect, useState } from 'react'
 import { Game } from '../common/types';
 import { getGamesList } from './home.api';
 
+
+const useStyles = makeStyles({
+  tableRow: {
+    cursor: 'pointer'
+  }
+})
+
 interface HomeProps extends RouteComponentProps {
 
 }
 
-const Home: React.FC<HomeProps> = ({}) => {
+const Home: React.FC<HomeProps> = () => {
+  const classes = useStyles();
+  const navigate = useNavigate();
   
   const [games, setGames] = useState<Game[] | null>(null)
 
@@ -22,6 +31,8 @@ const Home: React.FC<HomeProps> = ({}) => {
     }
     fetchGamesList()
   }, [])
+
+  const onRowClick = (gameId: string) => navigate(`games/${gameId}`)
 
     return (<>
       <Typography variant="h1">Games</Typography>
@@ -37,7 +48,8 @@ const Home: React.FC<HomeProps> = ({}) => {
         </TableHead>
         <TableBody>
           {games && games.map(game => (
-            <TableRow key={game.id}>
+            <TableRow className={classes.tableRow} hover key={game.id} onClick={() => onRowClick(game.id)}>
+           
               <TableCell>
                 {game.id}
               </TableCell>
@@ -52,7 +64,7 @@ const Home: React.FC<HomeProps> = ({}) => {
                   <Delete />
               </IconButton>
               </TableCell>
-            </TableRow>
+              </TableRow>
           ))}
         </TableBody>
       </Table>

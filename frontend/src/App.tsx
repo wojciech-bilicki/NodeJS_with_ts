@@ -12,7 +12,7 @@ function App() {
         {/* Someone is trying to modify existing game */}
         <Details path="/games/:gameId" />
         {/* Someone is trying to add a new game to a list */}
-        <Details path="/games" /> 
+        <Details path="/games/new" /> 
       </Router>
     </div>  
   );
