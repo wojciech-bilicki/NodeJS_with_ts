@@ -1,16 +1,22 @@
 import { RouteComponentProps, useNavigate } from '@reach/router';
 import Typography from '@material-ui/core/Typography';
-import { IconButton, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
-import { Delete } from '@material-ui/icons'
+import { Fab, IconButton, makeStyles, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core';
+import { Add, Delete } from '@material-ui/icons'
 
 import React, { useEffect, useState } from 'react'
 import { Game } from '../common/types';
 import { getGamesList } from './home.api';
+import { deleteGame } from '../Details/details.api';
 
 
 const useStyles = makeStyles({
   tableRow: {
     cursor: 'pointer'
+  },
+  fab: {
+    position: 'fixed',
+    bottom: '32px',
+    right: '32px'
   }
 })
 
@@ -33,6 +39,12 @@ const Home: React.FC<HomeProps> = () => {
   }, [])
 
   const onRowClick = (gameId: string) => navigate(`games/${gameId}`)
+
+  const onDelete = async (event: React.MouseEvent<HTMLButtonElement>, gameId: string) => {
+    event.stopPropagation();
+    const listAfterDelete = await deleteGame(gameId);
+    setGames(listAfterDelete);
+  }
 
     return (<>
       <Typography variant="h1">Games</Typography>
@@ -60,7 +72,7 @@ const Home: React.FC<HomeProps> = () => {
                 {game.price}
               </TableCell>
               <TableCell>
-              <IconButton aria-label="delete" color="primary">
+              <IconButton onClick={(event) => onDelete(event, game.id)} aria-label="delete" color="primary">
                   <Delete />
               </IconButton>
               </TableCell>
@@ -69,6 +81,9 @@ const Home: React.FC<HomeProps> = () => {
         </TableBody>
       </Table>
       </TableContainer>
+      <Fab onClick={() => navigate('/games/new')} className={classes.fab} color="primary" aria-label="add">
+        <Add />
+      </Fab>
     </>);
 }
 

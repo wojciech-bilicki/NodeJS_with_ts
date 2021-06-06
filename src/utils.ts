@@ -11,6 +11,7 @@ export const getDataFromRequest = (req: IncomingMessage):Promise<Game> => new Pr
     })
 
     req.on('end', () => {
+      console.log(body)
       resolve(JSON.parse(body) as Game)
     })
 
@@ -23,3 +24,8 @@ export const getDataFromRequest = (req: IncomingMessage):Promise<Game> => new Pr
 export const getDefaultHeaders = () => (
   { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
 )
+
+export const getOptionsHeaders = () => ({
+  'Access-Control-Allow-Methods': '*',
+  'Access-Control-Allow-Headers': '*'
+})

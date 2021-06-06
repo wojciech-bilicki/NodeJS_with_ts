@@ -1,5 +1,6 @@
 import { createServer, request, RequestListener } from 'http';
 import { getGame, getGameList, createGame, updateGame, deleteGame } from './controller';
+import { getDefaultHeaders, getOptionsHeaders } from './utils';
 
 process.on('beforeExit', () => {
   console.log('We are about to exit the program')
@@ -30,6 +31,11 @@ const requestListener: RequestListener  = async(req, res) => {
   } if (req.url.match(/\games\/\w+/)  && req.method === 'DELETE') {
     const id = req.url.split('/')[2]
     return await deleteGame(res, id)
+
+  
+  } if(req.method === 'OPTIONS') {
+    res.writeHead(200, {...getDefaultHeaders(), ...getOptionsHeaders()});
+    res.end()
 
   } else {
     res.writeHead(404, {'Content-Type': 'application/json'})
